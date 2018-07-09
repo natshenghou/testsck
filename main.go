@@ -30,6 +30,9 @@ func main(){
 	fmt.Println("connect sucsess")
 	defer db.Close()
 	fmt.Println(read(db))
+	fmt.Println(remove(db,"2"))
+	fmt.Println(read(db))
+	
 }
 
 func read(db *sql.DB) []UserData{
@@ -60,6 +63,7 @@ func read(db *sql.DB) []UserData{
 	}
 	return userDataList
 }
+
 func add(db *sql.DB) bool{
 	statement,_ := db.Prepare(`INSERT INTO user 
 		(citizen_id, firstname, lastname, birthyear, 
@@ -72,4 +76,15 @@ func add(db *sql.DB) bool{
 			return false
 		}
 		return true
+}
+
+func remove(db *sql.DB,id string) bool{
+	statement,_ := db.Prepare("DELETE FROM user WHERE user_id=?") 
+
+	_,err := statement.Exec(id)
+	if err != nil {
+		panic(err.Error())
+		return false
+	}
+	return true
 }
