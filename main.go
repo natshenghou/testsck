@@ -29,7 +29,7 @@ func main(){
 
 	fmt.Println("connect sucsess")
 	defer db.Close()
-	read(db)
+	fmt.Println(read(db))
 }
 
 func read(db *sql.DB) []UserData{
@@ -58,6 +58,18 @@ func read(db *sql.DB) []UserData{
 		}	
 		userDataList = append(userDataList, userData)
 	}
-	fmt.Println(userDataList)
 	return userDataList
+}
+func add(db *sql.DB) bool{
+	statement,_ := db.Prepare(`INSERT INTO user 
+		(citizen_id, firstname, lastname, birthyear, 
+			firstname_father, lastname_father, firstname_mother,
+			 lastname_mother, soldier_id,address_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? )`)
+
+	_, err := statement.Exec("1552425252111","ชาติชาย2","เพ็ชรเม็ด","1985","สุชาติ","เพ็ชรเม็ด","แม่","เพ็ชรเม็ด","1","1")
+		if err != nil {
+			panic(err.Error())
+			return false
+		}
+		return true
 }
